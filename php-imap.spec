@@ -23,7 +23,7 @@
 Name:           %{?sub_prefix}php-%{pecl_name}
 Summary:        A module for PHP applications that use IMAP
 Version:        7.0.14
-Release:        1%{?dist}
+Release:        2%{?dist}
 Source0:        http://www.php.net/distributions/php-%{version}.tar.bz2
 
 License:        PHP
@@ -34,6 +34,11 @@ BuildRequires:  %{?scl_prefix}php-devel > 7
 BuildRequires:  krb5-devel
 BuildRequires:  openssl-devel
 BuildRequires:  uw-imap-devel
+
+%if "%{?scl_prefix}" != "%{?sub_prefix}"
+Provides:      %{?scl_prefix}php-%{pecl_name}          = %{version}-%{release}
+Provides:      %{?scl_prefix}php-%{pecl_name}%{?_isa}  = %{version}-%{release}
+%endif
 
 Requires:       %{?scl_prefix}php(zend-abi) = %{php_zend_api}
 Requires:       %{?scl_prefix}php(api) = %{php_core_api}
@@ -103,6 +108,9 @@ cd ext/%{pecl_name}
 
 
 %changelog
+* Tue Mar  7 2017 Remi Collet <remi@remirepo.net> - 7.0.14-2
+- add compatibility virtual provides
+
 * Tue Mar  7 2017 Remi Collet <remi@remirepo.net> - 7.0.14-1
 - initial package
 - version 7.0.14 for security bugs fixed since 7.0.10
