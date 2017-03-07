@@ -7,8 +7,8 @@
 # Please, preserve the changelog entries
 #
 %if 0%{?scl:1}
-%if "%{scl}" == "rh-php70"
-%global sub_prefix sclo-php70-
+%if "%{scl}" == "rh-php56"
+%global sub_prefix sclo-php56-
 %else
 %global sub_prefix %{scl_prefix}
 %endif
@@ -22,18 +22,23 @@
 
 Name:           %{?sub_prefix}php-%{pecl_name}
 Summary:        A module for PHP applications that use IMAP
-Version:        7.0.14
-Release:        1%{?dist}
+Version:        5.6.25
+Release:        2%{?dist}
 Source0:        http://www.php.net/distributions/php-%{version}.tar.bz2
 
 License:        PHP
 Group:          Development/Languages
 URL:            http://php.net/%{pecl_name}
 
-BuildRequires:  %{?scl_prefix}php-devel > 7
+BuildRequires:  %{?scl_prefix}php-devel >= 5.6.25
 BuildRequires:  krb5-devel
 BuildRequires:  openssl-devel
 BuildRequires:  uw-imap-devel
+
+%if "%{?scl_prefix}" != "%{?sub_prefix}"
+Provides:      %{?scl_prefix}php-%{pecl_name}          = %{version}-%{release}
+Provides:      %{?scl_prefix}php-%{pecl_name}%{?_isa}  = %{version}-%{release}
+%endif
 
 Requires:       %{?scl_prefix}php(zend-abi) = %{php_zend_api}
 Requires:       %{?scl_prefix}php(api) = %{php_core_api}
@@ -52,8 +57,8 @@ Package built for PHP %(%{__php} -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSIO
 %setup -q -n php-%{version}
 
 # Fix reported version
-sed -e '/PHP_IMAP_VERSION/s/PHP_VERSION/"%{version}"/' \
-    -i ext/%{pecl_name}/php_imap.h
+sed -e 's/NO_VERSION_YET/"%{version}"/' \
+    -i ext/%{pecl_name}/php_imap.c
 
 # Configuration file
 cat << 'EOF' | tee %{ini_name}
@@ -103,7 +108,10 @@ cd ext/%{pecl_name}
 
 
 %changelog
-* Tue Mar  7 2017 Remi Collet <remi@remirepo.net> - 7.0.14-1
+* Tue Mar  7 2017 Remi Collet <remi@remirepo.net> - 5.6.25-2
+- add compatibility virtual provides
+
+* Tue Mar  7 2017 Remi Collet <remi@remirepo.net> - 5.6.25-1
 - initial package
-- version 7.0.14 for security bugs fixed since 7.0.10
+- version 5.6.25
 
