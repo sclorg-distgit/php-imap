@@ -22,9 +22,14 @@
 
 Name:           %{?sub_prefix}php-%{pecl_name}
 Summary:        A module for PHP applications that use IMAP
-Version:        5.6.25
-Release:        2%{?dist}
+Version:        5.6.28
+Release:        1%{?dist}
 Source0:        http://www.php.net/distributions/php-%{version}.tar.bz2
+
+# add RETVAL_STRINGL_CHECK and RETURN_STRINGL_CHECK macros
+# and safe_emalloc_string function
+# backported from php 5.6.28 as missing in php 5.6.25
+Patch0:         php-stringl-check.patch
 
 License:        PHP
 Group:          Development/Languages
@@ -55,6 +60,7 @@ Package built for PHP %(%{__php} -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSIO
 
 %prep
 %setup -q -n php-%{version}
+%patch0 -p0 -b .check
 
 # Fix reported version
 sed -e 's/NO_VERSION_YET/"%{version}"/' \
@@ -108,6 +114,11 @@ cd ext/%{pecl_name}
 
 
 %changelog
+* Tue Mar  7 2017 Remi Collet <remi@remirepo.net> - 5.6.28-1
+- update to 5.6.28 for security fix since 5.6.25
+- backport RETVAL_STRINGL_CHECK and RETURN_STRINGL_CHECK macros
+- backport safe_emalloc_string
+
 * Tue Mar  7 2017 Remi Collet <remi@remirepo.net> - 5.6.25-2
 - add compatibility virtual provides
 
