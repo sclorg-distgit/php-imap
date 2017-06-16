@@ -1,0 +1,44 @@
+diff -up ext/imap/php_imap.c.check ext/imap/php_imap.c
+--- ext/imap/php_imap.c.check	2016-11-09 02:22:57.000000000 +0100
++++ ext/imap/php_imap.c	2017-03-07 15:48:13.357796749 +0100
+@@ -74,6 +74,40 @@ MAILSTREAM DEFAULTPROTO;
+ # define PHP_IMAP_EXPORT
+ #endif
+ 
++/* Backported from 5.6.28 */
++
++#ifndef RETVAL_STRINGL_CHECK
++/* Check that returned string length fits int */
++#define RETVAL_STRINGL_CHECK(s, len, dup) do {	\
++	size_t __len = (len);					\
++	if (UNEXPECTED(__len > INT_MAX)) { 		\
++		php_error_docref(NULL TSRMLS_CC, E_WARNING, "String too long, max is %d", INT_MAX); \
++		if(!(dup)) { 						\
++			efree((s));						\
++		}									\
++		RETURN_FALSE;						\
++	}										\
++	RETVAL_STRINGL((s), (int)__len, (dup)); \
++} while (0)
++#endif
++
++#ifndef RETURN_STRINGL_CHECK
++#define RETURN_STRINGL_CHECK(s, len, dup) { RETVAL_STRINGL_CHECK(s, len, dup); return; }
++#endif
++
++#ifndef safe_emalloc_string
++static void *_imap_safe_emalloc_string(size_t nmemb, size_t size, size_t offset)
++{
++	if (UNEXPECTED(size > (INT_MAX-offset)/nmemb)) {
++		zend_error(E_ERROR, "String allocation overflow, max size is %d", INT_MAX);
++	}
++	return _safe_emalloc(nmemb, size, offset);
++}
++#define safe_emalloc_string(nmemb, size, offset)	_imap_safe_emalloc_string((nmemb), (size), (offset))
++#endif
++
++/* ---------------------- */
++
+ static void _php_make_header_object(zval *myzvalue, ENVELOPE *en TSRMLS_DC);
+ static void _php_imap_add_body(zval *arg, BODY *body TSRMLS_DC);
+ static char* _php_imap_parse_address(ADDRESS *addresslist, zval *paddress TSRMLS_DC);
