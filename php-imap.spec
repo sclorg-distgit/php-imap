@@ -7,8 +7,8 @@
 # Please, preserve the changelog entries
 #
 %if 0%{?scl:1}
-%if "%{scl}" == "rh-php70"
-%global sub_prefix sclo-php70-
+%if "%{scl}" == "rh-php71"
+%global sub_prefix sclo-php71-
 %else
 %global sub_prefix %{scl_prefix}
 %endif
@@ -22,18 +22,19 @@
 
 Name:           %{?sub_prefix}php-%{pecl_name}
 Summary:        A module for PHP applications that use IMAP
-Version:        7.0.14
-Release:        2%{?dist}
-Source0:        http://www.php.net/distributions/php-%{version}.tar.bz2
+Version:        7.1.8
+Release:        1%{?dist}
+Source0:        http://www.php.net/distributions/php-%{version}.tar.xz
 
 License:        PHP
 Group:          Development/Languages
 URL:            http://php.net/%{pecl_name}
 
-BuildRequires:  %{?scl_prefix}php-devel > 7
+BuildRequires:  %{?scl_prefix}php-devel > 7.1
 BuildRequires:  krb5-devel
 BuildRequires:  openssl-devel
 BuildRequires:  uw-imap-devel
+BuildRequires:  uw-imap-static
 
 %if "%{?scl_prefix}" != "%{?sub_prefix}"
 Provides:      %{?scl_prefix}php-%{pecl_name}          = %{version}-%{release}
@@ -108,6 +109,9 @@ cd ext/%{pecl_name}
 
 
 %changelog
+* Thu Aug 10 2017 Remi Collet <remi@remirepo.net> - 7.1.8-1
+- update to 7.1.8 for sclo-php71
+
 * Tue Mar  7 2017 Remi Collet <remi@remirepo.net> - 7.0.14-2
 - add compatibility virtual provides
 
