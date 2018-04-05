@@ -1,6 +1,6 @@
 # centos/sclo spec file for php-imap
 #
-# Copyright (c) 2017 Remi Collet
+# Copyright (c) 2017-2018 Remi Collet
 # License: CC-BY-SA
 # http://creativecommons.org/licenses/by-sa/4.0/
 #
@@ -22,8 +22,8 @@
 
 Name:           %{?sub_prefix}php-%{pecl_name}
 Summary:        A module for PHP applications that use IMAP
-Version:        7.0.14
-Release:        2%{?dist}
+Version:        7.0.27
+Release:        1%{?dist}
 Source0:        http://www.php.net/distributions/php-%{version}.tar.bz2
 
 License:        PHP
@@ -108,6 +108,9 @@ cd ext/%{pecl_name}
 
 
 %changelog
+* Thu Apr  5 2018 Remi Collet <remi@remirepo.net> - 7.0.27-1
+- update to 7.0.27 for consistency (no change)
+
 * Tue Mar  7 2017 Remi Collet <remi@remirepo.net> - 7.0.14-2
 - add compatibility virtual provides
 
