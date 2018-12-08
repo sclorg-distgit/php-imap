@@ -23,8 +23,12 @@
 Name:           %{?sub_prefix}php-%{pecl_name}
 Summary:        A module for PHP applications that use IMAP
 Version:        7.2.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Source0:        http://www.php.net/distributions/php-%{version}.tar.xz
+
+# Security patches
+Patch1:         bug-77153.patch
+Patch2:         bug-77020.patch
 
 License:        PHP
 Group:          Development/Languages
@@ -56,6 +60,8 @@ Package built for PHP %(%{__php} -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSIO
 
 %prep
 %setup -q -n php-%{version}
+%patch1 -p1 -b .77153
+%patch2 -p1 -b .77020
 
 # Fix reported version
 sed -e '/PHP_IMAP_VERSION/s/PHP_VERSION/"%{version}"/' \
@@ -109,6 +115,11 @@ cd ext/%{pecl_name}
 
 
 %changelog
+* Sat Dec  8 2018 Remi Collet <remi@remirepo.net> - 7.2.13-1
+- Fix null pointer dereference in imap_mail CVE-2018-19935
+- Fix imap_open allows to run arbitrary shell commands via
+  mailbox parameter CVE-2018-19158
+
 * Thu Nov 15 2018 Remi Collet <remi@remirepo.net> - 7.2.10-1
 - update to 7.2.10 for sclo-php72
 
