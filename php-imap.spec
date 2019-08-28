@@ -1,6 +1,6 @@
 # centos/sclo spec file for php-imap
 #
-# Copyright (c) 2017 Remi Collet
+# Copyright (c) 2017-2019 Remi Collet
 # License: CC-BY-SA
 # http://creativecommons.org/licenses/by-sa/4.0/
 #
@@ -22,13 +22,9 @@
 
 Name:           %{?sub_prefix}php-%{pecl_name}
 Summary:        A module for PHP applications that use IMAP
-Version:        7.1.8
-Release:        2%{?dist}
+Version:        7.1.30
+Release:        1%{?dist}
 Source0:        http://www.php.net/distributions/php-%{version}.tar.xz
-
-# Security patches
-Patch1:         bug-77153.patch
-Patch2:         bug-77020.patch
 
 License:        PHP
 Group:          Development/Languages
@@ -60,8 +56,6 @@ Package built for PHP %(%{__php} -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSIO
 
 %prep
 %setup -q -n php-%{version}
-%patch1 -p1 -b .77153
-%patch2 -p1 -b .77020
 
 # Fix reported version
 sed -e '/PHP_IMAP_VERSION/s/PHP_VERSION/"%{version}"/' \
@@ -115,6 +109,9 @@ cd ext/%{pecl_name}
 
 
 %changelog
+* Wed Aug 28 2019 Remi Collet <remi@remirepo.net> - 7.1.30-1
+- rebase to 7.1.30
+
 * Sat Dec  8 2018 Remi Collet <remi@remirepo.net> - 7.1.8-2
 - Fix null pointer dereference in imap_mail CVE-2018-19935
 - Fix imap_open allows to run arbitrary shell commands via
