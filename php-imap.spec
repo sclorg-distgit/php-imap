@@ -22,7 +22,7 @@
 
 Name:           %{?sub_prefix}php-%{pecl_name}
 Summary:        A module for PHP applications that use IMAP
-Version:        7.3.7
+Version:        7.3.11
 Release:        1%{?dist}
 Source0:        http://www.php.net/distributions/php-%{version}.tar.xz
 
@@ -111,8 +111,11 @@ cd ext/%{pecl_name}
 
 
 %changelog
+* Tue Dec 10 2019 Remi Collet <remi@remirepo.net> - 7.3.11-1
+- update to 7.3.11
+
 * Fri Oct 25 2019 Remi Collet <remi@remirepo.net> - 7.3.7-1
-- update to 7.3.7 for sclo-php72
+- update to 7.3.7 for sclo-php73
 
 * Sat Dec  8 2018 Remi Collet <remi@remirepo.net> - 7.2.13-1
 - Fix null pointer dereference in imap_mail CVE-2018-19935
